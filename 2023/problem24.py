@@ -6,8 +6,7 @@ import math
 import os
 import time
 
-PART = 1
-TEST = 1
+TEST = 0
 PROBLEM = 24
 in_dir = "C:\\Users\\Alex\\Documents\\Projects\\advent_of_code\\2023\\"
 in_pattern = "test%d.txt" if TEST == 1 else "input%d.txt"
@@ -17,6 +16,10 @@ NUMS = "0123456789"
 stones = []
 TEST_MIN = 7 if TEST == 1 else 200000000000000
 TEST_MAX = 27 if TEST == 1 else 400000000000000
+
+LIMIT = 300 if TEST == 0 else 10
+EPSILON = 100 if TEST == 0 else .01
+EPSILON2 = .01
 
 class Line3:
   def __init__(self, pos, slope):
@@ -64,76 +67,62 @@ def intercept_xy(line1, line2):
     t[i] = sum(Ai[j][i] * b[j] for j in range(2))
   return t, line1.pos_xy_at(t[0]), line2.pos_xy_at(t[1])
 
-def does_intersect_xy(line1, line2):
-  t, i1, i2 = intercept_xy(line1, line2)
-  #print(t, line1, i1, line2, i2)
-  return t and t[0] >= 0 and t[1] >= 0 and inbounds(i1[0], i1[1])
-
 def inbounds(x, y):
   return x >= TEST_MIN and x <= TEST_MAX and y >= TEST_MIN and y <= TEST_MAX
 
+def does_intersect_xy(line1, line2):
+  t, i, _ = intercept_xy(line1, line2)
+  return t and t[0] >= 0 and t[1] >= 0 and inbounds(i[0], i[1])
+
 def intercept_xyz(line1, line2):
   t, i1, i2 = intercept_xy(line1, line2)
-  #print(t, i1, i2)
   if not t:
     return None, None, None
   for time in t:
     if time < 0:
       return None, None, None
   i1, i2 = line1.pos_at(t[0]), line2.pos_at(t[1])
-  if abs(i1[2] - i2[2]) > .01:
+  if abs(i1[2] - i2[2]) > EPSILON2:
     return None, None, None
   return t, i1, i2
 
-def z_dist_at_xy_intercept(line1, line2):
-  t, i1, i2 = intercept_xy(line1, line2)
-  #print(t, i1, i2)
-  if not t:
-    return None, None, None
-  for time in t:
-    if time < 0:
-      return None, None, None
-  i1, i2 = line1.pos_at(t[0]), line2.pos_at(t[1])
-  return i1[2] - i2[2], t, i1, i2
-
-
-EPSILON = .01 if TEST == 1 else 100
 def close_to(p1, p2):
   return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1]) + abs(p1[2] - p2[2]) < EPSILON
 
 def test_velocity2(test_v):
+  # Make everything relative to the rock. If this velocity is correct, all the
+  # hailstones will intersect at the same point.
   line1, line2 = stones[0].v_rel(test_v), stones[1].v_rel(test_v)
+
+  # Find the xy intersection of the first two stones
   t, i1, i2 = intercept_xy(line1, line2)
   if not t or t[0] < 0 or t[1] < 0:
-    return None, None, None
+    return None, None
   i1, i2 = line1.pos_at(t[0]), line2.pos_at(t[1])
 
-  # print(test_v, i1, i2, t)
-  # print(test_v, line1, line2)
+  # Calculate the z velocity that would cause these points to intersect in the
+  # z dimension as well.
   dz = i1[2] - i2[2]
   vz = 0
-  if abs(dz) > .0001:
+  if abs(dz) > EPSILON2:
     vz = dz / (t[0] - t[1])
-    #print("new_vz", vz)
   test_v = (test_v[0], test_v[1], vz)
   
-
+  # Refind the xyz intersection of the first two stones
   line1, line2 = stones[0].v_rel(test_v), stones[1].v_rel(test_v)
   i1, i2 = line1.pos_at(t[0]), line2.pos_at(t[1])
-  # print(test_v, line1, line2)
-  # print(test_v, i1, i2, close_to(i1, i2))
-  # old_intercepts = 
   intercepts = [i1, i2]
-  #print(test_v, intercepts)
+
+  # Check if this intersection point works for some number of the other stones.
+  # We probably only need 3 points, but use more to be safe.
   for i in range(2, min(len(stones), 4)):
     line3 = stones[i].v_rel(test_v)
     new_times, _, i3 = intercept_xyz(line1, line3)
     if not new_times or not close_to(i1, i3):
-      return None, None, None
+      return None, None
     t.append(new_times[1])
     intercepts.append(i3)
-  #print("OK", t, intercepts)
-  return t, intercepts, test_v
+  return intercepts, test_v
 
 def main():
   with open(in_file, 'r') as f:
@@ -152,46 +141,12 @@ def main():
         total += 1
   print("part 1:", total)
 
-  LIMIT = 5
-  X_CENTER = 0
-  Y_CENTER = 0
-  if TEST == 0:
-    LIMIT = 1
-    X_CENTER = 28
-    Y_CENTER = -286
-  # for vx in range(-LIMIT, LIMIT+1):
-  #   for vy in range(-LIMIT, LIMIT+1):
-  #     for vz in range(-LIMIT, LIMIT+1):
-  #       test_v = (vx, vy, vz)
-  #       t, i1 = test_velocity(test_v)
-  #       if t:
-  #         print(test_v, t, i1)
-  #         for i, time in enumerate(t):
-  #           print("  ", i, stones[i].pos_at(time))
-  #         rock = Line3(i1[0], test_v)
-  #         minus_b = rock.pos_at(t[0])
-  #         print("part 2: ", test_v, minus_b, sum(minus_b))
-  #   print("x", vx)
-
-  for vx in range(-LIMIT + X_CENTER, LIMIT+1 + X_CENTER):
-    for vy in range(-LIMIT + Y_CENTER, LIMIT+1 + Y_CENTER):
+  for vx in range(-LIMIT, LIMIT+1):
+    for vy in range(-LIMIT, LIMIT+1):
       test_v = (vx, vy, 0)
-      t, intercepts, new_v = test_velocity2(test_v)
-      if t:
-        print(new_v, t, intercepts)
-        for i, time in enumerate(t):
-          print("  ", i, time, stones[i].pos_at(time), intercepts[i], sum(round(v) for v in intercepts[i]))
-        # for i in range(len(intercepts)):
-        #   rock = Line3(intercepts[i], new_v)
-        #   minus_b = rock.pos_at(t[i])
-        #   print("part 2: ", new_v, minus_b, sum(minus_b))
-    #print("x", vx)
-
-  # test_v = (28, -286, 123.0)
-  # t, i1, new_v = test_velocity2(test_v)
-  # print()
-
-
+      intercepts, new_v = test_velocity2(test_v)
+      if intercepts:
+        print("part 2:", sum(round(v) for v in intercepts[0]))
 
 if __name__=="__main__":
   start = time.perf_counter()
