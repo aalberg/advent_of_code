@@ -1,0 +1,126 @@
+# pylint: skip-file
+# type: ignore
+ z15 ('snp', 'mnh', 'OR')
+  snp ('hhw', 'ccp', 'AND')
+   hhw ('x15', 'y15', 'XOR')
+    x15 True
+    y15 False
+   ccp ('gnp', 'qgm', 'OR')
+    gnp ('shm', 'kds', 'AND')
+     shm ('y14', 'x14', 'XOR')
+      y14 True
+      x14 True
+     kds ('vnf', 'wmm', 'OR')
+      vnf ('x13', 'y13', 'AND')
+       x13 False
+       y13 False
+      wmm ('fpk', 'bkq', 'AND')
+       fpk ('y13', 'x13', 'XOR')
+        y13 False
+        x13 False
+       bkq ('kpt', 'fgv', 'OR')
+        kpt ('hgm', 'jvd', 'AND')
+         hgm ('y12', 'x12', 'XOR')
+          y12 True
+          x12 False
+         jvd ('gnb', 'srh', 'OR')
+          gnb ('y11', 'x11', 'AND')
+           y11 True
+           x11 False
+          srh ('gwv', 'rkk', 'AND')
+           gwv ('y11', 'x11', 'XOR')
+            y11 True
+            x11 False
+           rkk ('tgt', 'nrg', 'OR')
+            tgt ('x10', 'y10', 'AND')
+             x10 True
+             y10 True
+            nrg ('vmf', 'vwd', 'AND')
+             vmf ('x10', 'y10', 'XOR')
+              x10 True
+              y10 True
+             vwd ('pjh', 'drj', 'OR')
+              pjh ('tkg', 'sjq', 'AND')
+               tkg ('jbk', 'vsq', 'OR')
+                jbk ('y08', 'x08', 'AND')
+                 y08 False
+                 x08 True
+                vsq ('tsj', 'sgm', 'AND')
+                 tsj ('y08', 'x08', 'XOR')
+                  y08 False
+                  x08 True
+                 sgm ('fpb', 'nfb', 'OR')
+                  fpb ('y07', 'x07', 'AND')
+                   y07 True
+                   x07 True
+                  nfb ('gsg', 'twm', 'AND')
+                   gsg ('y07', 'x07', 'XOR')
+                    y07 True
+                    x07 True
+                   twm ('brr', 'wcw', 'OR')
+                    brr ('fsb', 'thf', 'AND')
+                     fsb ('x06', 'y06', 'XOR')
+                      x06 False
+                      y06 True
+                     thf ('vjt', 'swv', 'OR')
+                      vjt ('y05', 'x05', 'AND')
+                       y05 False
+                       x05 True
+                      swv ('gpv', 'wjj', 'AND')
+                       gpv ('x05', 'y05', 'XOR')
+                        x05 True
+                        y05 False
+                       wjj ('ght', 'fnh', 'OR')
+                        ght ('hmn', 'jkv', 'AND')
+                         hmn ('fcc', 'npd', 'OR')
+                          fcc ('kpp', 'tmr', 'AND')
+                           kpp ('y03', 'x03', 'XOR')
+                            y03 True
+                            x03 False
+                           tmr ('rgn', 'jmb', 'OR')
+                            rgn ('gcm', 'pfd', 'AND')
+                             gcm ('hkv', 'kmk', 'OR')
+                              hkv ('x01', 'y01', 'AND')
+                               x01 True
+                               y01 False
+                              kmk ('ksw', 'kgn', 'AND')
+                               ksw ('y00', 'x00', 'AND')
+                                y00 True
+                                x00 True
+                               kgn ('x01', 'y01', 'XOR')
+                                x01 True
+                                y01 False
+                             pfd ('y02', 'x02', 'XOR')
+                              y02 True
+                              x02 False
+                            jmb ('y02', 'x02', 'AND')
+                             y02 True
+                             x02 False
+                          npd ('x03', 'y03', 'AND')
+                           x03 False
+                           y03 True
+                         jkv ('x04', 'y04', 'XOR')
+                          x04 False
+                          y04 False
+                        fnh ('y04', 'x04', 'AND')
+                         y04 False
+                         x04 False
+                    wcw ('x06', 'y06', 'AND')
+                     x06 False
+                     y06 True
+               sjq ('y09', 'x09', 'XOR')
+                y09 True
+                x09 False
+              drj ('y09', 'x09', 'AND')
+               y09 True
+               x09 False
+        fgv ('x12', 'y12', 'AND')
+         x12 False
+         y12 True
+    qgm ('y14', 'x14', 'AND')
+     y14 True
+     x14 True
+  mnh ('x15', 'y15', 'AND')
+   x15 True
+   y15 False
+{'snp', 'qgm', 'hhw', 'gnp', 'mnh', 'ccp'}
