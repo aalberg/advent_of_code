@@ -14,19 +14,9 @@ PROBLEM = 6
 IN_DIR = f"C:\\Users\\Alex\\Documents\\Projects\\advent_of_code\\2025\\day{PROBLEM}"
 IN_PATTERN = "test.txt" if TEST == 1 else "input.txt"
 IN_FILE = os.path.join(IN_DIR, IN_PATTERN)
-NUMS = "0123456789"
-
-
-def nextline(f):
-  line = f.readline()
-  if not line:
-    return ""
-  line = line.rstrip()
-  return line
 
 
 def do_op(group, op):
-  print(op, group)
   total = 0 if op == "+" else 1
   for e in group:
     if op == "+":
@@ -43,7 +33,7 @@ def main():
     for line in f:
       if not line:
         continue
-      line = list(filter(None, line.rstrip().split(" ",)))
+      line = list(filter(None, line.rstrip().split(" ")))
       if line[0] == "*" or line[0] == "+":
         ops = line
         break
@@ -64,37 +54,25 @@ def main():
       if not line:
         continue
       grid.append(list(line))
-  #print(grid)
-  #for g in grid:
-  #  print(len(g))
+
   total = 0
   op = ""
   group = []
 
   for x in range(len(grid[0])):
     line = ""
-    for y in range(len(grid)):
-      line += grid[y][x]
-    #print("line|" + line + "|")
-
-    #line = line.strip()
+    for g in grid:
+      line += g[x]
     if not line.strip():
-      op = op.strip()
-      print(op)
-      total += do_op(group, op)
+      total += do_op(group, op.strip())
       group = []
       op = ""
       continue
     op += line[-1]
-    value = int(line[:-1])
-    print('v:', value)
-    group.append(value)
+    group.append(int(line[:-1]))
 
-  op = op.strip()
-  print(op)
-  total += do_op(group, op)
+  total += do_op(group, op.strip())
   print('part 2:', total)
-  #print(grid)
 
 
 if __name__ == "__main__":
