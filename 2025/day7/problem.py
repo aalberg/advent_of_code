@@ -30,8 +30,9 @@ def main():
     new_active = defaultdict(int)
     for a, count in active.items():
       split = False
-      for splititer in re.finditer(r'\^', row):
-        col = splititer.start()
+      for col, v in enumerate(row):
+        if v != "^":
+          continue
         if a == col:
           split = True
           total += 1
