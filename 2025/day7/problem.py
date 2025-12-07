@@ -29,16 +29,11 @@ def main():
   for row in grid:
     new_active = defaultdict(int)
     for a, count in active.items():
-      split = False
-      for col, v in enumerate(row):
-        if v != "^":
-          continue
-        if a == col:
-          split = True
-          total += 1
-          new_active[col - 1] += count
-          new_active[col + 1] += count
-      if not split:
+      if row[a] == "^":
+        total += 1
+        new_active[a - 1] += count
+        new_active[a + 1] += count
+      else:
         new_active[a] += count
     active = new_active
 
